@@ -1,8 +1,11 @@
 .App {
   text-align: center;
   background-color: #282c34;
-  width:100vw;
-  height:100vh;
-  color:white;
+  background-image: url("wood_bg.jpg");
+  width: 100vw;
+  height: 100vh;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
-

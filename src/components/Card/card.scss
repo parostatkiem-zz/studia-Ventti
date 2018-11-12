@@ -1,17 +1,26 @@
-$size: 10em;
+$size: 8.5em;
 $labelMargin: 0.08 * $size;
 
 .card {
+  display: inline-block;
+  margin: 0.3em;
   font-family: CardFont;
   width: $size;
   height: 1.4 * $size;
   border-radius: 0.06 * $size;
-  background: white;
+  background-image: url("christmas-colour.png");
+  background-size: auto;
+  background-color: white;
   color: black;
   position: relative;
   font-size: 0.13 * $size;
   filter: drop-shadow(1px 1px 3px black);
   cursor: pointer;
+  user-select: none;
+
+  &.red {
+    color: red;
+  }
 }
 
 @font-face {
@@ -19,28 +28,41 @@ $labelMargin: 0.08 * $size;
   src: url("./CARD.TTF");
 }
 
-.value {
+%cornerLabel {
   position: absolute;
-  top: $labelMargin;
+
   left: $labelMargin;
+  text-shadow: 1px 1px #fff, -1px 1px #fff, 1px -1px #fff, -1px -1px #fff,
+    1px 1px 3px black;
   &.inverse {
     top: unset;
     left: unset;
     transform: rotate(180deg);
+  }
+}
+
+.value {
+  @extend %cornerLabel;
+  top: $labelMargin;
+  &.inverse {
     right: $labelMargin;
     bottom: $labelMargin;
   }
 }
 
 .mark {
-  position: absolute;
+  @extend %cornerLabel;
   top: $labelMargin + 0.15 * $size;
-  left: $labelMargin;
+
   &.inverse {
-    top: unset;
-    left: unset;
-    transform: rotate(180deg);
     right: $labelMargin;
     bottom: $labelMargin + 0.15 * $size;
   }
+}
+
+.mark--big {
+  position: absolute;
+  top: 18%;
+  left: 21%;
+  font-size: 0.7 * $size;
 }
