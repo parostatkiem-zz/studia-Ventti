@@ -1,13 +1,13 @@
 import "./player.scss";
 import React, { Component } from "react";
 import Card from "../Card/card";
+import ClassNames from "classnames";
 
 class Player extends Component {
   render() {
-    const { cards } = this.props;
-    cards && console.log(cards);
+    const { cards, inverted } = this.props;
     return (
-      <div className="player__cards">
+      <div className={ClassNames("player__cards", { inverted })}>
         {cards &&
           cards.length &&
           cards.map(card => (

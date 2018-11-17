@@ -4,6 +4,12 @@ $cardsOffset: 0.15em;
   flex-direction: row-reverse;
   padding-right: 3em;
 
+  &.dimmed {
+    opacity: 0.3;
+    .card {
+      cursor: wait;
+    }
+  }
   .card_stack__wrapper {
     position: relative;
 

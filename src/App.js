@@ -10,13 +10,15 @@ class App extends Component {
     AIPoints: 0,
     playerPoints: 0,
     playerScore: 0,
-    cardsOnStack: []
+    cardsOnStack: [],
+    amountOfDrawnCards: 2,
+    playerCanDraw: true
   };
   componentDidMount() {
     this.newGame();
   }
 
-  giveCardsToPlayer = amount => {
+  giveCards = (arrayName, amount) => {
     const stack = this.state.cardsOnStack;
 
     if (stack.length < amount) {
@@ -25,16 +27,17 @@ class App extends Component {
     }
 
     let givenCards = [];
-    for (let i = 0; i <= amount; i++) {
+
+    for (let i = 0; i < amount; i++) {
       givenCards = [
         ...givenCards,
-        stack.splice(this.getRandomInt(stack.length), 1)[0]
+        stack.splice(this.getRandomInt(stack.length), 1)[0] //get random card from the stack and remove it from the stack
       ];
     }
 
     this.setState(oldState => ({
-      cardsOnStack: stack,
-      playerCards: [...oldState.playerCards, ...givenCards]
+      cardsOnStack: stack, //a copy of the stack without some cards
+      [arrayName]: [...oldState[arrayName], ...givenCards] //simply: old cards + new cards
     }));
   };
 
@@ -49,17 +52,31 @@ class App extends Component {
         newCardSet.push({ value, mark });
       }
     }
-    this.setState({ cardsOnStack: newCardSet });
+    this.setState({
+      cardsOnStack: newCardSet,
+      amountOfDrawnCards: 2,
+      playerCanDraw: true
+    });
   }
   handleStackClick = () => {
-    this.giveCardsToPlayer(3);
+    if (!this.state.playerCanDraw) return;
+    this.setState({ playerCanDraw: false });
+    this.giveCards("playerCards", this.state.amountOfDrawnCards);
+    this.state.amountOfDrawnCards > 1 &&
+      this.setState({ amountOfDrawnCards: 1 });
+    setTimeout(() => {
+      this.giveCards("AICards", 1);
+      this.setState({ playerCanDraw: true });
+    }, 500);
   };
   render() {
     return (
       <div className="App">
-        {/* <Ai/> */}
-        <Player />
-        <CardStack onClick={this.handleStackClick} />
+        <Player inverted={true} cards={this.state.AICards} />
+        <CardStack
+          dimmed={!this.state.playerCanDraw}
+          onClick={this.handleStackClick}
+        />
         <Player cards={this.state.playerCards} />
       </div>
     );
