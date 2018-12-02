@@ -2,4 +2,11 @@
   &.inverted {
     transform: rotate(180deg);
   }
+
+  &.dimmed {
+    opacity: 0.3;
+    .card {
+      cursor: wait;
+    }
+  }
 }
