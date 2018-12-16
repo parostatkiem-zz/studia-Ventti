@@ -1,5 +1,5 @@
 import React from "react";
-import "./card.scss";
+import "./Card.scss";
 import classNames from "classnames";
 
 const Card = ({ value, mark }) => (

@@ -1,6 +1,6 @@
-import "./player.scss";
+import "./Player.scss";
 import React, { Component } from "react";
-import Card from "../Card/card";
+import Card from "../Card/Card";
 import ClassNames from "classnames";
 
 class Player extends Component {
@@ -11,7 +11,7 @@ class Player extends Component {
         onClick={onClick}
         className={ClassNames("player__cards", { inverted }, { dimmed })}
       >
-        {cards &&
+        {(cards &&
           cards.length &&
           cards.map(card => (
             <Card
@@ -19,7 +19,8 @@ class Player extends Component {
               value={card.value}
               mark={card.mark}
             />
-          ))}
+          ))) ||
+          null}
       </div>
     );
   }

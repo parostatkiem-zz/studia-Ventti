@@ -1,33 +1,13 @@
 import React, { Component } from "react";
 import "./App.scss";
-import Player from "./components/Player/player";
-import CardStack from "./components/CardStack/card_stack";
+import Player from "./components/Player/Player";
+import CardStack from "./components/CardStack/CardStack";
 import MessageBox from "./components/MessageBox/MessageBox";
+import { ShouldAIdraw, GetRandomInt } from "./helpers";
+import PointCounter from "./components/PointCounter/PointCounter";
 
-const drawDecisionWeights = [
-  1,
-  1,
-  1,
-  1,
-  1,
-  1,
-  1,
-  1,
-  1,
-  1,
-  1,
-  1,
-  0.8, //13
-  0.5, //14
-  0.35, //15
-  0.2, //16
-  0.1, //17
-  0.08, //18
-  0.05, //19
-  0.03, //20
-  0 // 21
-];
 class App extends Component {
+  //============ REACT THINGS ===========
   state = {
     playerCards: [],
     AICards: [],
@@ -37,79 +17,74 @@ class App extends Component {
     cardsOnStack: [],
     amountOfDrawnCards: 2,
     isPlayerActive: true,
-    message: null
+    message: null,
+    AIscore: 0,
+    humanScore: 0
   };
   componentDidMount() {
-    this.newGame();
+    this.NewGame();
   }
 
   componentDidUpdate(prevProps, prevState) {
     if (!this.state.isPlayerPlaing && !this.state.isAIplaying) {
-      this.displayTheWinner();
+      this.DisplayTheWinner();
     }
   }
 
-  displayTheWinner = () => {
-    const playerPoints = this.getPoints("playerCards");
-    const AIpoints = this.getPoints("AICards");
-    let winner = "nobody";
-    if ((AIpoints <= 21 && AIpoints > playerPoints) || playerPoints > 21) {
-      winner = "AI";
-    } else {
-      winner = "Player";
-    }
-
-    console.warn("END OF GAME, ", winner, " won.");
-    this.setState({ message: `GAME OVER, ${winner} won`, isAIplaying: true });
-  };
-
-  giveCards = (arrayName, amount) => {
-    const stack = this.state.cardsOnStack;
-
-    if (stack.length < amount) {
-      console.error("Couldn't draw more cards");
-      return;
-    }
-
-    let givenCards = [];
-
-    for (let i = 0; i < amount; i++) {
-      givenCards = [
-        ...givenCards,
-        stack.splice(this.getRandomInt(stack.length), 1)[0] //get random card from the stack and remove it from the stack
-      ];
-    }
-
-    this.setState(
-      oldState => ({
-        cardsOnStack: stack, //a copy of the stack without some cards
-        [arrayName]: [...oldState[arrayName], ...givenCards] //simply: old cards + new cards
-      }),
-      () => {
-        console.log(
-          "Player: ",
-          this.getPoints("playerCards"),
-          "AI: ",
-          this.getPoints("AICards")
-        );
-        if (this.getPoints("AICards") > 21) {
-          console.log("AI has >= 21 points, PLAYER WON");
-          this.setState({ isAIplaying: false, isPlayerPlaing: false });
-        }
-
-        if (this.getPoints("playerCards") > 21) {
-          console.log("Player has >= 21 points, AI WON");
-          this.setState({ isPlayerPlaing: false, isAIplaying: false });
-        }
-      }
+  render() {
+    const { humanScore, AIscore } = this.state;
+    return (
+      <div className="App">
+        <PointCounter {...{ humanScore, AIscore }} />
+        {this.state.message && (
+          <MessageBox
+            onClose={this.handleMessageClose}
+            message={this.state.message}
+          />
+        )}
+        <Player id="ai" inverted={true} cards={this.state.AICards} />
+        <CardStack
+          dimmed={!this.state.isPlayerActive}
+          onClick={this.handleStackClick}
+        />
+        <Player
+          id="player"
+          dimmed={!this.state.isPlayerActive}
+          onClick={this.handleOwnCardsClick}
+          cards={this.state.playerCards}
+        />
+      </div>
     );
-  };
-
-  getRandomInt(max) {
-    return Math.floor(Math.random() * max);
   }
 
-  newGame() {
+  //=====================================
+
+  DisplayTheWinner = () => {
+    const playerPoints = this.GetPoints("playerCards");
+    const AIpoints = this.GetPoints("AICards");
+
+    const winner = { name: "nobody", points: 0 };
+    if ((AIpoints <= 21 && AIpoints > playerPoints) || playerPoints > 21) {
+      winner.name = "AI";
+      winner.points = AIpoints;
+    } else {
+      winner.name = "Player";
+      winner.points = playerPoints;
+    }
+
+    console.warn("END OF GAME, ", winner.name, " won.");
+    this.setState(prevState => ({
+      message: `GAME OVER, ${winner.name} won with ${winner.points} points`,
+      humanScore:
+        winner.name === "Player"
+          ? prevState.humanScore + 1
+          : prevState.humanScore,
+
+      AIscore: winner.name === "AI" ? prevState.AIscore + 1 : prevState.AIscore,
+      isAIplaying: true
+    }));
+  };
+  NewGame() {
     const newCardSet = [];
     for (let value = 1; value <= 13; value++) {
       for (let mark = 0; mark <= 3; mark++) {
@@ -126,11 +101,50 @@ class App extends Component {
       AICards: []
     });
   }
-  shouldAIdraw = () => {
-    return Math.random() <= drawDecisionWeights[this.getPoints("AICards")];
+
+  GiveCards = (arrayName, amount) => {
+    const stack = this.state.cardsOnStack;
+
+    if (stack.length < amount) {
+      console.error("Couldn't draw more cards");
+      return;
+    }
+
+    let givenCards = [];
+
+    for (let i = 0; i < amount; i++) {
+      givenCards = [
+        ...givenCards,
+        stack.splice(GetRandomInt(stack.length), 1)[0] //get random card from the stack and remove it from the stack
+      ];
+    }
+
+    this.setState(
+      oldState => ({
+        cardsOnStack: stack, //a copy of the stack without some cards
+        [arrayName]: [...oldState[arrayName], ...givenCards] //simply: old cards + new cards
+      }),
+      () => {
+        console.log(
+          "Player: ",
+          this.GetPoints("playerCards"),
+          "AI: ",
+          this.GetPoints("AICards")
+        );
+        if (this.GetPoints("AICards") > 21) {
+          console.log("AI has >= 21 points, PLAYER WON");
+          this.setState({ isAIplaying: false, isPlayerPlaing: false });
+        }
+
+        if (this.GetPoints("playerCards") > 21) {
+          console.log("Player has >= 21 points, AI WON");
+          this.setState({ isPlayerPlaing: false, isAIplaying: false });
+        }
+      }
+    );
   };
 
-  getPoints = cardArray => {
+  GetPoints = cardArray => {
     let i = this.state[cardArray].length
       ? this.state[cardArray]
           .map(card => card.value)
@@ -140,8 +154,8 @@ class App extends Component {
   };
 
   AIdoMove = () => {
-    if (this.shouldAIdraw()) {
-      this.giveCards("AICards", 1);
+    if (ShouldAIdraw(this.GetPoints("AICards"), 2)) {
+      this.GiveCards("AICards", 1);
 
       setTimeout(() => {
         this.AIdoMove();
@@ -155,10 +169,11 @@ class App extends Component {
     }
   };
 
+  //========= EVENT HANDLERS ===========
   handleStackClick = () => {
     if (!this.state.isPlayerActive) return;
 
-    this.giveCards("playerCards", this.state.amountOfDrawnCards);
+    this.GiveCards("playerCards", this.state.amountOfDrawnCards);
     if (this.state.amountOfDrawnCards > 1) {
       this.setState({ amountOfDrawnCards: 1 }, () => {
         setTimeout(() => {
@@ -176,30 +191,8 @@ class App extends Component {
   };
 
   handleMessageClose = () => {
-    this.setState({ message: null }, () => this.newGame());
+    this.setState({ message: null }, () => this.NewGame());
   };
-  render() {
-    return (
-      <div className="App">
-        {this.state.message && (
-          <MessageBox
-            onClose={this.handleMessageClose}
-            message={this.state.message}
-          />
-        )}
-        <Player inverted={true} cards={this.state.AICards} />
-        <CardStack
-          dimmed={!this.state.isPlayerActive}
-          onClick={this.handleStackClick}
-        />
-        <Player
-          dimmed={!this.state.isPlayerActive}
-          onClick={this.handleOwnCardsClick}
-          cards={this.state.playerCards}
-        />
-      </div>
-    );
-  }
+  //====================================
 }
-
 export default App;
