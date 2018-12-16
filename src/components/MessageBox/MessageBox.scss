@@ -1,0 +1,34 @@
+.message-box__container {
+  background-image: url("../../yellow-bg.png");
+  padding: 0.5rem;
+  max-width: 70vw;
+  color: black;
+  border-radius: 0.5rem;
+  position: relative;
+  overflow: visible;
+  box-sizing: border-box;
+}
+
+.message-box__backdrop {
+  z-index: 1000;
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  left: 0;
+  top: 0;
+  background-color: rgba($color: #000000, $alpha: 0.65);
+}
+
+.message-box__message {
+  margin: 0.5rem;
+}
+
+.message-box__close {
+  position: absolute;
+  right: 0;
+  top: 0;
+  background-color: red;
+}

@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import "./App.scss";
 import Player from "./components/Player/player";
 import CardStack from "./components/CardStack/card_stack";
+import MessageBox from "./components/MessageBox/MessageBox";
 
 const drawDecisionWeights = [
   1,
@@ -35,7 +36,8 @@ class App extends Component {
     playerScore: 0,
     cardsOnStack: [],
     amountOfDrawnCards: 2,
-    isPlayerActive: true
+    isPlayerActive: true,
+    message: null
   };
   componentDidMount() {
     this.newGame();
@@ -58,6 +60,7 @@ class App extends Component {
     }
 
     console.warn("END OF GAME, ", winner, " won.");
+    this.setState({ message: `GAME OVER, ${winner} won`, isAIplaying: true });
   };
 
   giveCards = (arrayName, amount) => {
@@ -91,12 +94,12 @@ class App extends Component {
         );
         if (this.getPoints("AICards") > 21) {
           console.log("AI has >= 21 points, PLAYER WON");
-          this.setState({ isAIplaying: false });
+          this.setState({ isAIplaying: false, isPlayerPlaing: false });
         }
 
         if (this.getPoints("playerCards") > 21) {
           console.log("Player has >= 21 points, AI WON");
-          this.setState({ isPlayerPlaing: false });
+          this.setState({ isPlayerPlaing: false, isAIplaying: false });
         }
       }
     );
@@ -118,7 +121,9 @@ class App extends Component {
       amountOfDrawnCards: 2,
       isPlayerActive: true,
       isAIplaying: true,
-      isPlayerPlaing: true
+      isPlayerPlaing: true,
+      playerCards: [],
+      AICards: []
     });
   }
   shouldAIdraw = () => {
@@ -166,12 +171,22 @@ class App extends Component {
 
   handleOwnCardsClick = () => {
     if (!this.state.isPlayerActive) return;
-    console.log("clicked own cards");
+
     this.setState({ isPlayerActive: false, isPlayerPlaing: false });
+  };
+
+  handleMessageClose = () => {
+    this.setState({ message: null }, () => this.newGame());
   };
   render() {
     return (
       <div className="App">
+        {this.state.message && (
+          <MessageBox
+            onClose={this.handleMessageClose}
+            message={this.state.message}
+          />
+        )}
         <Player inverted={true} cards={this.state.AICards} />
         <CardStack
           dimmed={!this.state.isPlayerActive}
