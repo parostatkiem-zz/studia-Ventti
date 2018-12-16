@@ -1,0 +1,34 @@
+$cardsOffset: 0.15em;
+.card_stack {
+  display: flex;
+  flex-direction: row-reverse;
+  padding-right: 3em;
+
+  &.dimmed {
+    opacity: 0.3;
+    .card {
+      cursor: wait;
+    }
+  }
+  .card_stack__wrapper {
+    position: relative;
+
+    .card--empty {
+      &.card--front {
+        right: 0;
+      }
+      &.card--back1 {
+        right: $cardsOffset * 2;
+        top: $cardsOffset;
+
+        position: absolute;
+      }
+
+      &.card--back2 {
+        right: $cardsOffset * 4;
+        position: absolute;
+        top: $cardsOffset * 2;
+      }
+    }
+  }
+}
