@@ -5,6 +5,8 @@ import CardStack from "./components/CardStack/CardStack";
 import MessageBox from "./components/MessageBox/MessageBox";
 import { ShouldAIdraw, GetRandomInt } from "./helpers";
 import PointCounter from "./components/PointCounter/PointCounter";
+import Switcher from "./components/Switcher/Switcher";
+import { timingSafeEqual } from "crypto";
 
 class App extends Component {
   //============ REACT THINGS ===========
@@ -19,7 +21,8 @@ class App extends Component {
     isPlayerActive: true,
     message: null,
     AIscore: 0,
-    humanScore: 0
+    humanScore: 0,
+    difficulty: 1
   };
   componentDidMount() {
     this.NewGame();
@@ -36,6 +39,10 @@ class App extends Component {
     return (
       <div className="App">
         <PointCounter {...{ humanScore, AIscore }} />
+        <Switcher
+          onDifficultyChange={this.handleDifficultyChange}
+          difficulty={this.state.difficulty}
+        />
         {this.state.message && (
           <MessageBox
             onClose={this.handleMessageClose}
@@ -154,7 +161,7 @@ class App extends Component {
   };
 
   AIdoMove = () => {
-    if (ShouldAIdraw(this.GetPoints("AICards"), 2)) {
+    if (ShouldAIdraw(this.GetPoints("AICards"), this.state.difficulty)) {
       this.GiveCards("AICards", 1);
 
       setTimeout(() => {
@@ -192,6 +199,10 @@ class App extends Component {
 
   handleMessageClose = () => {
     this.setState({ message: null }, () => this.NewGame());
+  };
+
+  handleDifficultyChange = difficulty => {
+    this.setState({ difficulty });
   };
   //====================================
 }

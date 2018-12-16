@@ -1,0 +1,44 @@
+.switcher {
+  grid-column: 1;
+  grid-row: 2;
+  grid-gap: 2rem;
+  left: 0;
+  top: 40vh;
+  display: grid;
+  width: 100%;
+
+  .mug {
+    width: 100%;
+
+    transition: 1s;
+    filter: drop-shadow(2px 2px 4px black);
+  }
+
+  .face-container {
+    display: grid;
+    width: 100%;
+    grid-gap: 2.5rem;
+    grid-template-columns: repeat(3, 3fr);
+
+    .face {
+      width: 100%;
+      cursor: pointer;
+      filter: drop-shadow(2px 2px 1px rgba(0, 0, 0, 0.5));
+    }
+  }
+  &.d0 {
+    .mug {
+      transform: rotate(255deg);
+    }
+  }
+  &.d1 {
+    .mug {
+      transform: rotate(225deg);
+    }
+  }
+  &.d2 {
+    .mug {
+      transform: rotate(195deg);
+    }
+  }
+}

@@ -1,4 +1,5 @@
 .player__cards {
+  grid-column: 1 / span 3;
   &.inverted {
     transform: rotate(180deg);
   }

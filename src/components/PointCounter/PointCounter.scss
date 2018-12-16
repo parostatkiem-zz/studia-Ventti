@@ -13,6 +13,8 @@
   height: 3rem;
   justify-content: space-evenly;
   color: #444;
+  filter: drop-shadow(2px 2px 1px rgba(0, 0, 0, 0.5));
+
   .divider {
     height: 100%;
   }

@@ -5,7 +5,9 @@
   width: 100vw;
   height: 100vh;
   color: white;
-  display: flex;
+  display: grid;
+  grid-template-columns: 12rem auto 20rem;
+  grid-template-rows: repeat(3, 1fr);
   flex-direction: column;
   justify-content: space-between;
 }
