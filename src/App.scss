@@ -1,13 +1,13 @@
 .App {
   text-align: center;
   background-color: #282c34;
-  background-image: url("wood_bg.jpg");
+  background-image: url('wood_bg.jpg');
   width: 100vw;
   height: 100vh;
   color: white;
   display: grid;
-  grid-template-columns: 12rem auto 20rem;
-  grid-template-rows: repeat(3, 1fr);
+  grid-template-columns: 12em auto 20em;
+  grid-template-rows: repeat(3, 33.3vh);
   flex-direction: column;
   justify-content: space-between;
 }

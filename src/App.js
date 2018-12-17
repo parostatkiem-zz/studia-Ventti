@@ -122,7 +122,7 @@ class App extends Component {
     for (let i = 0; i < amount; i++) {
       givenCards = [
         ...givenCards,
-        stack.splice(GetRandomInt(stack.length), 1)[0] //get random card from the stack and remove it from the stack
+        stack.splice(GetRandomInt(stack.length), 1)[0] //get random card from the stack and emove it from the stack
       ];
     }
 

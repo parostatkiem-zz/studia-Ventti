@@ -1,9 +1,9 @@
 .message-box__container {
   background-image: url("../../yellow-bg.png");
-  padding: 0.5rem;
+  padding: 0.5em;
   max-width: 70vw;
   color: black;
-  border-radius: 0.5rem;
+  border-radius: 0.5em;
   position: relative;
   overflow: visible;
   box-sizing: border-box;
@@ -23,7 +23,7 @@
 }
 
 .message-box__message {
-  margin: 0.5rem;
+  margin: 0.5em;
 }
 
 .message-box__close {
