@@ -25,6 +25,9 @@ class App extends Component {
     difficulty: 1
   };
   componentDidMount() {
+    if (localStorage.state) {
+      this.setState(JSON.parse(localStorage.state));
+    }
     this.NewGame();
   }
 
@@ -32,6 +35,7 @@ class App extends Component {
     if (!this.state.isPlayerPlaing && !this.state.isAIplaying) {
       this.DisplayTheWinner();
     }
+    localStorage.setItem("state", JSON.stringify(this.state));
   }
 
   render() {
