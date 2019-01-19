@@ -1,7 +1,7 @@
 .switcher {
   grid-column: 1;
   grid-row: 2;
-  grid-gap: 2rem;
+  grid-gap: 2em;
   left: 0;
   top: 40vh;
   display: grid;
@@ -17,7 +17,7 @@
   .face-container {
     display: grid;
     width: 100%;
-    grid-gap: 2.5rem;
+    grid-gap: 2.5em;
     grid-template-columns: repeat(3, 3fr);
 
     .face {
