@@ -21,9 +21,13 @@
     grid-template-columns: repeat(3, 3fr);
 
     .face {
+      transition: 0.6s;
       width: 100%;
       cursor: pointer;
       filter: drop-shadow(2px 2px 1px rgba(0, 0, 0, 0.5));
+      &:hover {
+        transform: rotate(360deg) translateY(-1em) scale(1.5);
+      }
     }
   }
   &.d0 {

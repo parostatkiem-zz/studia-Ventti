@@ -33,6 +33,8 @@ const GetMarkSymbol = mark => {
       return "{";
     case 3:
       return "}";
+    default:
+      return "[";
   }
 };
 

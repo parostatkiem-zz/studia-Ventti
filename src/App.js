@@ -6,7 +6,7 @@ import MessageBox from "./components/MessageBox/MessageBox";
 import { ShouldAIdraw, GetRandomInt } from "./helpers";
 import PointCounter from "./components/PointCounter/PointCounter";
 import Switcher from "./components/Switcher/Switcher";
-import { timingSafeEqual } from "crypto";
+import Copyright from "./components/Copyright/Copyright";
 
 class App extends Component {
   //============ REACT THINGS ===========
@@ -60,6 +60,7 @@ class App extends Component {
           onClick={this.handleOwnCardsClick}
           cards={this.state.playerCards}
         />
+        <Copyright />
       </div>
     );
   }
