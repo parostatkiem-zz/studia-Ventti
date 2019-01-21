@@ -28,7 +28,7 @@ class App extends Component {
     if (localStorage.state) {
       this.setState(JSON.parse(localStorage.state));
     }
-    this.NewGame();
+    this.NewGame(true);
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -99,22 +99,23 @@ class App extends Component {
       isAIplaying: true,
     }));
   };
-  NewGame() {
+  NewGame(skipDefaults = false) {
     const newCardSet = [];
     for (let value = 1; value <= 13; value++) {
       for (let mark = 0; mark <= 3; mark++) {
         newCardSet.push({ value, mark });
       }
     }
-    this.setState({
-      cardsOnStack: newCardSet,
-      amountOfDrawnCards: 2,
-      isPlayerActive: true,
-      isAIplaying: true,
-      isPlayerPlaing: true,
-      playerCards: [],
-      AICards: [],
-    });
+    !skipDefaults &&
+      this.setState({
+        cardsOnStack: newCardSet,
+        amountOfDrawnCards: 2,
+        isPlayerActive: true,
+        isAIplaying: true,
+        isPlayerPlaing: true,
+        playerCards: [],
+        AICards: [],
+      });
   }
 
   GiveCards = (arrayName, amount) => {
