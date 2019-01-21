@@ -1,19 +1,19 @@
-$size: 8.5em;
-$labelMargin: 0.08 * $size;
+@import '../../variables';
+$labelMargin: 0.08 * $cardSize;
 
 .card {
   display: inline-block;
   margin: 0.3em;
   font-family: CardFont;
-  width: $size;
-  height: 1.4 * $size;
-  border-radius: 0.06 * $size;
-  background-image: url("christmas-colour.png");
+  width: $cardSize;
+  height: 1.4 * $cardSize;
+  border-radius: 0.06 * $cardSize;
+  background-image: url('christmas-colour.png');
   background-size: auto;
   background-color: white;
   color: black;
   position: relative;
-  font-size: 0.13 * $size;
+  font-size: 0.13 * $cardSize;
   filter: drop-shadow(1px 1px 3px black);
   cursor: pointer;
   user-select: none;
@@ -25,7 +25,7 @@ $labelMargin: 0.08 * $size;
 
 @font-face {
   font-family: CardFont;
-  src: url("../../fonts/CARD.TTF");
+  src: url('../../fonts/CARD.TTF');
 }
 
 %cornerLabel {
@@ -52,11 +52,11 @@ $labelMargin: 0.08 * $size;
 
 .mark {
   @extend %cornerLabel;
-  top: $labelMargin + 0.15 * $size;
+  top: $labelMargin + 0.15 * $cardSize;
 
   &.inverse {
     right: $labelMargin;
-    bottom: $labelMargin + 0.15 * $size;
+    bottom: $labelMargin + 0.15 * $cardSize;
   }
 }
 
@@ -64,5 +64,5 @@ $labelMargin: 0.08 * $size;
   position: absolute;
   top: 18%;
   left: 21%;
-  font-size: 0.7 * $size;
+  font-size: 0.7 * $cardSize;
 }

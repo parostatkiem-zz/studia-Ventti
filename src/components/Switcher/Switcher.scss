@@ -1,15 +1,13 @@
+@import '../../variables';
 .switcher {
   grid-column: 1;
   grid-row: 2;
   grid-gap: 2em;
-  left: 0;
-  top: 40vh;
-  display: grid;
-  width: 100%;
 
+  display: grid;
+  height: $cardSize;
   .mug {
     width: 100%;
-
     transition: 1s;
     filter: drop-shadow(2px 2px 4px black);
   }
