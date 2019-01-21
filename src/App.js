@@ -1,12 +1,13 @@
-import React, { Component } from 'react';
-import './App.scss';
-import Player from './components/Player/Player';
-import CardStack from './components/CardStack/CardStack';
-import MessageBox from './components/MessageBox/MessageBox';
-import { ShouldAIdraw, GetRandomInt } from './helpers';
-import PointCounter from './components/PointCounter/PointCounter';
-import Switcher from './components/Switcher/Switcher';
-import Copyright from './components/Copyright/Copyright';
+import React, { Component } from "react";
+import "./App.scss";
+import Player from "./components/Player/Player";
+import CardStack from "./components/CardStack/CardStack";
+import MessageBox from "./components/MessageBox/MessageBox";
+import { ShouldAIdraw, GetRandomInt } from "./helpers";
+import PointCounter from "./components/PointCounter/PointCounter";
+import Switcher from "./components/Switcher/Switcher";
+import Copyright from "./components/Copyright/Copyright";
+import KeyboardLegend from "./components/KeyboardLegend/KeyboardLegend";
 
 class App extends Component {
   //============ REACT THINGS ===========
@@ -22,20 +23,23 @@ class App extends Component {
     message: null,
     AIscore: 0,
     humanScore: 0,
-    difficulty: 1,
+    difficulty: 1
   };
   componentDidMount() {
     if (localStorage.state) {
       this.setState(JSON.parse(localStorage.state));
     }
     this.NewGame(true);
+    document.onkeypress = e => {
+      this.handleKeyPressed(e, this);
+    };
   }
 
   componentDidUpdate(prevProps, prevState) {
     if (!this.state.isPlayerPlaing && !this.state.isAIplaying) {
       this.DisplayTheWinner();
     }
-    localStorage.setItem('state', JSON.stringify(this.state));
+    localStorage.setItem("state", JSON.stringify(this.state));
   }
 
   render() {
@@ -67,6 +71,7 @@ class App extends Component {
           onClick={this.handleOwnCardsClick}
           cards={this.state.playerCards}
         />
+        <KeyboardLegend />
         <Copyright />
       </div>
     );
@@ -75,28 +80,28 @@ class App extends Component {
   //=====================================
 
   DisplayTheWinner = () => {
-    const playerPoints = this.GetPoints('playerCards');
-    const AIpoints = this.GetPoints('AICards');
+    const playerPoints = this.GetPoints("playerCards");
+    const AIpoints = this.GetPoints("AICards");
 
-    const winner = { name: 'nobody', points: 0 };
+    const winner = { name: "nobody", points: 0 };
     if ((AIpoints <= 21 && AIpoints > playerPoints) || playerPoints > 21) {
-      winner.name = 'AI';
+      winner.name = "AI";
       winner.points = AIpoints;
     } else {
-      winner.name = 'Player';
+      winner.name = "Player";
       winner.points = playerPoints;
     }
 
-    console.warn('END OF GAME, ', winner.name, ' won.');
+    console.warn("END OF GAME, ", winner.name, " won.");
     this.setState(prevState => ({
       message: `GAME OVER, ${winner.name} won with ${winner.points} points`,
       humanScore:
-        winner.name === 'Player'
+        winner.name === "Player"
           ? prevState.humanScore + 1
           : prevState.humanScore,
 
-      AIscore: winner.name === 'AI' ? prevState.AIscore + 1 : prevState.AIscore,
-      isAIplaying: true,
+      AIscore: winner.name === "AI" ? prevState.AIscore + 1 : prevState.AIscore,
+      isAIplaying: true
     }));
   };
   NewGame(skipDefaults = false) {
@@ -114,7 +119,7 @@ class App extends Component {
         isAIplaying: true,
         isPlayerPlaing: true,
         playerCards: [],
-        AICards: [],
+        AICards: []
       });
   }
 
@@ -131,32 +136,32 @@ class App extends Component {
     for (let i = 0; i < amount; i++) {
       givenCards = [
         ...givenCards,
-        stack.splice(GetRandomInt(stack.length), 1)[0], //get random card from the stack and emove it from the stack
+        stack.splice(GetRandomInt(stack.length), 1)[0] //get random card from the stack and emove it from the stack
       ];
     }
 
     this.setState(
       oldState => ({
         cardsOnStack: stack, //a copy of the stack without some cards
-        [arrayName]: [...oldState[arrayName], ...givenCards], //simply: old cards + new cards
+        [arrayName]: [...oldState[arrayName], ...givenCards] //simply: old cards + new cards
       }),
       () => {
         console.log(
-          'Player: ',
-          this.GetPoints('playerCards'),
-          'AI: ',
-          this.GetPoints('AICards'),
+          "Player: ",
+          this.GetPoints("playerCards"),
+          "AI: ",
+          this.GetPoints("AICards")
         );
-        if (this.GetPoints('AICards') > 21) {
-          console.log('AI has >= 21 points, PLAYER WON');
+        if (this.GetPoints("AICards") > 21) {
+          console.log("AI has >= 21 points, PLAYER WON");
           this.setState({ isAIplaying: false, isPlayerPlaing: false });
         }
 
-        if (this.GetPoints('playerCards') > 21) {
-          console.log('Player has >= 21 points, AI WON');
+        if (this.GetPoints("playerCards") > 21) {
+          console.log("Player has >= 21 points, AI WON");
           this.setState({ isPlayerPlaing: false, isAIplaying: false });
         }
-      },
+      }
     );
   };
 
@@ -170,8 +175,8 @@ class App extends Component {
   };
 
   AIdoMove = () => {
-    if (ShouldAIdraw(this.GetPoints('AICards'), this.state.difficulty)) {
-      this.GiveCards('AICards', 1);
+    if (ShouldAIdraw(this.GetPoints("AICards"), this.state.difficulty)) {
+      this.GiveCards("AICards", 1);
 
       setTimeout(() => {
         this.AIdoMove();
@@ -179,9 +184,9 @@ class App extends Component {
     } else {
       this.setState(prevState => ({
         isAIplaying: false,
-        isPlayerActive: prevState.isPlayerPlaing,
+        isPlayerActive: prevState.isPlayerPlaing
       }));
-      console.log('AI decided not to draw');
+      console.log("AI decided not to draw");
     }
   };
 
@@ -189,7 +194,7 @@ class App extends Component {
   handleStackClick = () => {
     if (!this.state.isPlayerActive) return;
 
-    this.GiveCards('playerCards', this.state.amountOfDrawnCards);
+    this.GiveCards("playerCards", this.state.amountOfDrawnCards);
     if (this.state.amountOfDrawnCards > 1) {
       this.setState({ amountOfDrawnCards: 1 }, () => {
         setTimeout(() => {
@@ -214,12 +219,41 @@ class App extends Component {
     this.setState({ difficulty });
   };
   handlePointCounterClick = () => {
-    if (window.confirm('Are you sure you want to reset points?')) {
+    if (window.confirm("Are you sure you want to reset points?")) {
       this.setState({ humanScore: 0, AIscore: 0 }, () => {
         this.NewGame();
       });
     }
   };
+
+  handleKeyPressed(event, context) {
+    const { key } = event;
+    switch (key) {
+      case " ":
+        if (context.state.message) {
+          this.handleMessageClose();
+          return;
+        }
+        if (context.state.isPlayerActive) {
+          this.handleStackClick();
+          return;
+        }
+        break;
+      case "r":
+        if (context.state.isPlayerActive) {
+          this.handlePointCounterClick();
+        }
+        break;
+      case "Enter":
+        if (context.state.isPlayerActive && context.state.playerCards.length) {
+          this.handleOwnCardsClick();
+        }
+        break;
+
+      default: {
+      }
+    }
+  }
   //====================================
 }
 export default App;
