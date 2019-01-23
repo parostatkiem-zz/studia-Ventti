@@ -72,7 +72,7 @@ class App extends Component {
     );
   }
 
-  //=====================================
+  //=============== GAME LOGIC ======================
 
   DisplayTheWinner = () => {
     const playerPoints = this.GetPoints('playerCards');
