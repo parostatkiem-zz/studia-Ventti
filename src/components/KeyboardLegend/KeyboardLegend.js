@@ -1,5 +1,5 @@
-import React from "react";
-import "./KeyboardLegend.scss";
+import React from 'react';
+import './KeyboardLegend.scss';
 
 const KeyboardLegend = () => (
   <div className="keyboard-legend">
@@ -13,6 +13,9 @@ const KeyboardLegend = () => (
       </li>
       <li>
         <strong>Enter</strong> - Zakończ turę
+      </li>
+      <li>
+        <strong>1, 2, 3</strong> - Zmiana poziomu trudności
       </li>
     </ul>
   </div>
